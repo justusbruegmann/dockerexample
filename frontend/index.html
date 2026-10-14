@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8" />
+  <title>Users - Simple Frontend</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <style>
+    body { font-family: Arial, Helvetica, sans-serif; max-width:800px; margin:20px auto; padding:0 12px; }
+    h1 { margin-bottom: 0.2rem; }
+    form { margin: 12px 0 20px; display:flex; gap:8px; align-items:center; }
+    input[type="text"], input[type="email"] { padding:6px; flex:1; }
+    button { padding:6px 10px; }
+    ul { list-style:none; padding-left:0; }
+    li { padding:8px 6px; border-bottom:1px solid #eee; }
+    .meta { color:#666; font-size:0.9rem; }
+    .err { color:crimson; }
+  </style>
+</head>
+<body>
+  <h1>Users</h1>
+  
+
+  <section>
+    <h2>Liste</h2>
+    <ul id="users"></ul>
+  </section>
+
+  <script>
+    const apiBase = '/api'; // nginx proxies /api/ to the backend container
+    const statusEl = document.getElementById('status');
+    const usersEl = document.getElementById('users');
+
+   
+
+    async function fetchUsers() {
+      try {
+        const res = await fetch(apiBase + '/users');
+        if (!res.ok) throw new Error('Fehler beim Laden');
+        const data = await res.json();
+        usersEl.innerHTML = data.map(u => `
+          <li>
+            <strong>${u.name || ''}</strong> &mdash; ${u.email || ''}
+            <div class="meta">id: ${u.id} — ${u.created_at || ''}</div>
+          </li>
+        `).join('') || '<li>Keine Nutzer</li>';
+      } catch (e) {
+        usersEl.innerHTML = '<li>Fehler beim Laden der Nutzer</li>';
+        console.error(e);
+      }
+    }
+
+    fetchUsers();
+  </script>
+</body>
+</html>
