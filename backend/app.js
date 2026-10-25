@@ -4,10 +4,10 @@ const express = require('express');
 const mariadb = require('mariadb');
 
 const {
-  MARIADB_HOST = '127.0.0.1',
+  MARIADB_HOST = '172.17.0.2',
   MARIADB_PORT = '3306',
   MARIADB_USER = 'root',
-  MARIADB_PASSWORD = '',
+  MARIADB_PASSWORD = 'sick',
   MARIADB_DATABASE = 'testdb',
   PORT = 3000
 } = process.env;
